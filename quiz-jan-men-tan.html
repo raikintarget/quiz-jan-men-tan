@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Жан мен Тән — Денсаулық квизі</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#E8E3DC;
+  --card:#FFFDF8;
+  --primary:#3B6B4A;
+  --primary-light:#5A9B6B;
+  --primary-dark:#2A4D36;
+  --accent:#C8956C;
+  --accent-warm:#E8A87C;
+  --text:#2C2C2C;
+  --text-light:#6B6B6B;
+  --danger:#C0392B;
+  --success:#27AE60;
+  --shadow:0 8px 32px rgba(43,60,48,0.12);
+  --shadow-lg:0 16px 48px rgba(43,60,48,0.18);
+  --radius:16px;
+  --radius-sm:10px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+/* — TEXTURE BACKGROUND — */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse at 20% 20%,rgba(59,107,74,0.06) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 80%,rgba(200,149,108,0.08) 0%,transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233B6B4A' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.container{
+  position:relative;z-index:1;
+  max-width:520px;margin:0 auto;padding:20px 16px 40px;
+}
+
+/* — HEADER — */
+.header{
+  text-align:center;padding:32px 20px 24px;margin-bottom:12px;
+}
+.header-logo{
+  display:inline-flex;align-items:center;gap:10px;margin-bottom:16px;
+}
+.header-logo svg{width:44px;height:44px}
+.header-logo span{
+  font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.4rem;
+  color:var(--primary-dark);letter-spacing:-0.5px;
+}
+.header h1{
+  font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.5rem;
+  color:var(--primary-dark);line-height:1.3;margin-bottom:8px;
+}
+.header p{
+  font-size:0.92rem;color:var(--text-light);line-height:1.5;max-width:380px;margin:0 auto;
+}
+
+/* — PROGRESS — */
+.progress-wrap{
+  background:rgba(59,107,74,0.08);border-radius:20px;height:10px;
+  margin-bottom:20px;overflow:hidden;position:relative;
+}
+.progress-bar{
+  height:100%;border-radius:20px;
+  background:linear-gradient(90deg,var(--primary),var(--primary-light));
+  transition:width .6s cubic-bezier(.4,0,.2,1);width:0;
+  box-shadow:0 0 12px rgba(59,107,74,0.3);
+}
+.progress-text{
+  text-align:center;font-size:0.82rem;color:var(--text-light);
+  margin-bottom:20px;font-weight:600;
+}
+
+/* — QUIZ CARD — */
+.quiz-card{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;
+  animation:cardIn .5s ease;
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(24px) scale(0.97)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.card-image{
+  width:100%;height:200px;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.card-image svg{width:100%;height:100%}
+
+.card-body{padding:24px 20px 28px}
+.question-number{
+  display:inline-block;
+  font-family:'Montserrat',sans-serif;font-weight:800;font-size:0.72rem;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--primary);background:rgba(59,107,74,0.08);
+  padding:4px 12px;border-radius:20px;margin-bottom:12px;
+}
+.question-text{
+  font-family:'Montserrat',sans-serif;font-weight:700;font-size:1.08rem;
+  color:var(--primary-dark);line-height:1.4;margin-bottom:20px;
+}
+
+/* — OPTIONS — */
+.options{display:flex;flex-direction:column;gap:10px}
+.option{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;border-radius:var(--radius-sm);
+  border:2px solid rgba(59,107,74,0.1);
+  background:rgba(59,107,74,0.02);
+  cursor:pointer;transition:all .25s ease;
+  position:relative;overflow:hidden;
+}
+.option::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(59,107,74,0.06),transparent);
+  opacity:0;transition:opacity .25s;
+}
+.option:hover{
+  border-color:var(--primary-light);
+  transform:translateX(4px);
+  box-shadow:0 4px 16px rgba(59,107,74,0.1);
+}
+.option:hover::before{opacity:1}
+.option:active{transform:scale(0.98)}
+.option-icon{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:rgba(59,107,74,0.08);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;transition:all .25s;position:relative;z-index:1;
+}
+.option:hover .option-icon{
+  background:var(--primary);color:#fff;transform:scale(1.08);
+}
+.option-text{
+  font-weight:600;font-size:0.92rem;color:var(--text);
+  position:relative;z-index:1;
+}
+
+.option.selected{
+  border-color:var(--primary);background:rgba(59,107,74,0.06);
+}
+.option.selected .option-icon{
+  background:var(--primary);color:#fff;
+}
+
+/* — RESULT — */
+.result-card{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);overflow:hidden;
+  animation:cardIn .6s ease;text-align:center;
+}
+.result-image{
+  width:100%;height:220px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#E8F5E9,#C8E6C9);
+  position:relative;
+}
+.result-image svg{width:200px;height:200px}
+.result-body{padding:28px 24px 32px}
+.result-body h2{
+  font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.4rem;
+  color:var(--primary-dark);margin-bottom:12px;
+}
+.result-body p{
+  font-size:0.95rem;color:var(--text-light);line-height:1.6;margin-bottom:24px;
+}
+.result-summary{
+  text-align:left;background:rgba(59,107,74,0.04);
+  border-radius:var(--radius-sm);padding:16px;margin-bottom:24px;
+}
+.result-summary .item{
+  display:flex;gap:8px;padding:6px 0;font-size:0.85rem;color:var(--text);
+}
+.result-summary .item span:first-child{color:var(--primary);font-weight:700;min-width:20px}
+
+.whatsapp-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 32px;border-radius:60px;border:none;
+  background:linear-gradient(135deg,#25D366,#128C7E);
+  color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:1rem;
+  cursor:pointer;transition:all .3s;text-decoration:none;
+  box-shadow:0 6px 24px rgba(37,211,102,0.35);
+  animation:pulse 2s infinite;
+}
+.whatsapp-btn:hover{transform:scale(1.05);box-shadow:0 8px 32px rgba(37,211,102,0.5)}
+@keyframes pulse{
+  0%,100%{box-shadow:0 6px 24px rgba(37,211,102,0.35)}
+  50%{box-shadow:0 6px 32px rgba(37,211,102,0.55)}
+}
+.whatsapp-btn svg{width:24px;height:24px}
+
+/* — START SCREEN — */
+.start-screen{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);overflow:hidden;text-align:center;
+  animation:cardIn .6s ease;
+}
+.start-image{
+  width:100%;height:220px;
+  background:linear-gradient(135deg,rgba(59,107,74,0.15),rgba(200,149,108,0.12));
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.start-image::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:60px;
+  background:linear-gradient(transparent,var(--card));
+}
+.start-body{padding:8px 24px 32px}
+.start-body h2{
+  font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.35rem;
+  color:var(--primary-dark);margin-bottom:10px;line-height:1.3;
+}
+.start-body p{
+  font-size:0.9rem;color:var(--text-light);line-height:1.6;margin-bottom:24px;
+}
+.start-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:16px 40px;border-radius:60px;border:none;
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:1rem;
+  cursor:pointer;transition:all .3s;
+  box-shadow:0 6px 24px rgba(59,107,74,0.3);
+}
+.start-btn:hover{transform:scale(1.05)}
+
+.start-features{
+  display:flex;gap:12px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;
+}
+.feature-tag{
+  padding:6px 14px;border-radius:20px;font-size:0.78rem;font-weight:600;
+  background:rgba(59,107,74,0.06);color:var(--primary-dark);
+}
+
+/* — LEAD FORM — */
+.lead-card{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);overflow:hidden;
+  animation:cardIn .6s ease;text-align:center;
+}
+.lead-body{padding:32px 24px 36px}
+.lead-body h2{
+  font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.35rem;
+  color:var(--primary-dark);margin-bottom:10px;
+}
+.lead-body p{
+  font-size:0.9rem;color:var(--text-light);line-height:1.6;margin-bottom:24px;
+}
+.lead-field{
+  display:flex;flex-direction:column;gap:8px;margin-bottom:16px;text-align:left;
+}
+.lead-field label{
+  font-weight:700;font-size:0.83rem;color:var(--primary-dark);
+}
+.lead-field input{
+  padding:13px 16px;border-radius:var(--radius-sm);
+  border:2px solid rgba(59,107,74,0.15);
+  font-size:0.95rem;font-family:'Noto Sans',sans-serif;
+  background:#fff;color:var(--text);outline:none;
+  transition:border-color .25s;
+}
+.lead-field input:focus{border-color:var(--primary);}
+.lead-field input::placeholder{color:#aaa;}
+.lead-submit-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:16px;border-radius:60px;border:none;
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  color:#fff;font-family:'Montserrat',sans-serif;font-weight:700;font-size:1rem;
+  cursor:pointer;transition:all .3s;margin-top:8px;
+  box-shadow:0 6px 24px rgba(59,107,74,0.3);
+}
+.lead-submit-btn:hover{transform:scale(1.03)}
+.lead-guarantee{
+  font-size:0.78rem;color:var(--text-light);margin-top:12px;
+}
+
+/* — HIDDEN — */
+.hidden{display:none!important}
+
+/* — MOBILE — */
+@media(max-width:480px){
+  .container{padding:12px 10px 30px}
+  .header h1{font-size:1.25rem}
+  .card-body{padding:20px 16px 24px}
+  .card-image{height:170px}
+  .question-text{font-size:1rem}
+  .option{padding:12px 14px}
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="app">
+
+  <!-- START SCREEN -->
+  <div id="startScreen" class="start-screen">
+    <div class="start-image">
+      <svg viewBox="0 0 520 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Healing hands with leaf -->
+        <defs>
+          <linearGradient id="gLeaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5A9B6B"/><stop offset="1" stop-color="#3B6B4A"/></linearGradient>
+          <linearGradient id="gWarm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8A87C"/><stop offset="1" stop-color="#C8956C"/></linearGradient>
+        </defs>
+        <circle cx="260" cy="110" r="80" fill="url(#gLeaf)" opacity="0.1"/>
+        <circle cx="260" cy="110" r="55" fill="url(#gLeaf)" opacity="0.15"/>
+        <!-- Heart -->
+        <path d="M260 155 C240 135,215 110,215 90 C215 75,225 65,240 65 C250 65,257 72,260 78 C263 72,270 65,280 65 C295 65,305 75,305 90 C305 110,280 135,260 155Z" fill="url(#gLeaf)" opacity="0.7"/>
+        <!-- Leaf left -->
+        <path d="M210 130 C190 115,185 85,200 70 C205 80,215 95,225 110Z" fill="#5A9B6B" opacity="0.5"/>
+        <!-- Leaf right -->
+        <path d="M310 130 C330 115,335 85,320 70 C315 80,305 95,295 110Z" fill="#5A9B6B" opacity="0.5"/>
+        <!-- Sparkles -->
+        <circle cx="195" cy="60" r="3" fill="#C8956C" opacity="0.6"/>
+        <circle cx="330" cy="55" r="2.5" fill="#C8956C" opacity="0.5"/>
+        <circle cx="230" cy="45" r="2" fill="#5A9B6B" opacity="0.4"/>
+        <circle cx="295" cy="42" r="2" fill="#5A9B6B" opacity="0.4"/>
+        <text x="260" y="185" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="800" font-size="14" fill="#3B6B4A" opacity="0.6">ЖАН МЕН ТӘН</text>
+      </svg>
+    </div>
+    <div class="start-body">
+      <h2>Денсаулығыңызды тексеріп көріңіз!</h2>
+      <p>7 қарапайым сұраққа жауап беріңіз — біз сізге <strong>жеке кеңес</strong> пен <strong>табиғи сауықтыру бағдарламасын</strong> ұсынамыз</p>
+      <div class="start-features">
+        <span class="feature-tag">⏱ 2 минут</span>
+        <span class="feature-tag">🌿 Табиғи ем</span>
+        <span class="feature-tag">🩺 Жеке кеңес</span>
+      </div>
+      <button class="start-btn" onclick="startQuiz()">
+        Тексеруді бастау →
+      </button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quizSection" class="hidden">
+    <div class="header">
+      <div class="header-logo">
+        <svg viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="20" fill="#3B6B4A" opacity="0.1"/><path d="M22 32 C16 27,11 22,11 17 C11 13,14 10,18 10 C20 10,21.5 11.5,22 13 C22.5 11.5,24 10,26 10 C30 10,33 13,33 17 C33 22,28 27,22 32Z" fill="#3B6B4A"/></svg>
+        <span>Жан мен Тән</span>
+      </div>
+    </div>
+
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="progress-text" id="progressText">Сұрақ 1 / 7</div>
+
+    <div class="quiz-card" id="quizCard">
+      <div class="card-image" id="cardImage"></div>
+      <div class="card-body">
+        <div class="question-number" id="qNumber">Сұрақ 1</div>
+        <div class="question-text" id="qText"></div>
+        <div class="options" id="optionsWrap"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEAD FORM -->
+  <div id="leadSection" class="hidden">
+    <div class="lead-card">
+      <div class="lead-body">
+        <div style="font-size:2.5rem;margin-bottom:12px">🎉</div>
+        <h2>Тамаша! Сұрақтарды аяқтадыңыз!</h2>
+        <p>Жеке сауықтыру бағдарламасын алу үшін <strong>атыңызды</strong> және <strong>телефон нөміріңізді</strong> жазыңыз — маман сізге жазады</p>
+        <div class="lead-field">
+          <label>Аты-жөніңіз</label>
+          <input type="text" id="leadName" placeholder="Мысалы: Айгерім" autocomplete="name"/>
+        </div>
+        <div class="lead-field">
+          <label>Телефон нөміріңіз</label>
+          <input type="tel" id="leadPhone" placeholder="+7 (___) ___-__-__" autocomplete="tel"/>
+        </div>
+        <button class="lead-submit-btn" onclick="submitLead()">
+          Нәтижені алу →
+        </button>
+        <p class="lead-guarantee">🔒 Деректеріңіз тек маманға жіберіледі. Спам жоқ.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="resultSection" class="hidden"></div>
+
+</div>
+
+<script>
+const WHATSAPP_NUMBER = "77473663481";
+
+const questions = [
+  {
+    q: "СІЗДІ ҚАЙ МӘСЕЛЕ КӨБІРЕК МАЗАЛАЙДЫ?",
+    opts: [
+      {t:"Қан қысымы", icon:"💉"},
+      {t:"Қант диабеті", icon:"🩸"},
+      {t:"Жүрек аурулары", icon:"❤️‍🩹"},
+      {t:"Асқазан / ішек", icon:"🫄"},
+      {t:"Бауыр / өт", icon:"🫁"},
+      {t:"Бел, буын, омыртқа", icon:"🦴"},
+      {t:"Ұйқысыздық, жүйке", icon:"🧠"},
+      {t:"Ерлер / әйелдер гормоналды мәселесі", icon:"⚕️"},
+      {t:"Басқа", icon:"➕"}
+    ],
+    image: `<svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="520" height="200" fill="#F0F7F2"/>
+      <circle cx="260" cy="90" r="60" fill="#E8F5E9"/>
+      <!-- body silhouette -->
+      <ellipse cx="260" cy="65" rx="18" ry="20" fill="#3B6B4A" opacity="0.3"/>
+      <rect x="243" y="82" width="34" height="50" rx="10" fill="#3B6B4A" opacity="0.25"/>
+      <!-- pain indicators -->
+      <circle cx="220" cy="55" r="8" fill="#C0392B" opacity="0.3"><animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite"/></circle>
+      <circle cx="300" cy="75" r="7" fill="#C0392B" opacity="0.25"><animate attributeName="r" values="5;9;5" dur="2.3s" repeatCount="indefinite"/></circle>
+      <circle cx="250" cy="100" r="6" fill="#C0392B" opacity="0.2"><animate attributeName="r" values="4;8;4" dur="1.8s" repeatCount="indefinite"/></circle>
+      <circle cx="280" cy="60" r="5" fill="#E67E22" opacity="0.3"><animate attributeName="r" values="3;7;3" dur="2.5s" repeatCount="indefinite"/></circle>
+      <text x="260" y="170" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="11" fill="#3B6B4A" opacity="0.5">Қай жеріңіз мазалайды?</text>
+    </svg>`
+  },
+  {
+    q: "БҰЛ МӘСЕЛЕ ҚАНША УАҚЫТТАН БЕРІ БАР?",
+    opts: [
+      {t:"1–3 ай", icon:"📅"},
+      {t:"6 айға дейін", icon:"📆"},
+      {t:"1 жылдан аса", icon:"🗓"},
+      {t:"3–5 жыл", icon:"⏳"},
+      {t:"5 жылдан көп", icon:"⌛"}
+    ],
+    image: `<svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="520" height="200" fill="#FFF8F0"/>
+      <!-- clock -->
+      <circle cx="260" cy="95" r="55" fill="#FFF3E8" stroke="#C8956C" stroke-width="3"/>
+      <circle cx="260" cy="95" r="48" fill="none" stroke="#C8956C" stroke-width="1" opacity="0.3"/>
+      <!-- clock hands -->
+      <line x1="260" y1="95" x2="260" y2="60" stroke="#3B6B4A" stroke-width="3" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 260 95" to="360 260 95" dur="10s" repeatCount="indefinite"/></line>
+      <line x1="260" y1="95" x2="285" y2="95" stroke="#C8956C" stroke-width="2" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 260 95" to="360 260 95" dur="60s" repeatCount="indefinite"/></line>
+      <circle cx="260" cy="95" r="4" fill="#3B6B4A"/>
+      <!-- time marks -->
+      <text x="260" y="50" text-anchor="middle" font-size="10" fill="#C8956C" font-weight="700">12</text>
+      <text x="310" y="99" text-anchor="middle" font-size="10" fill="#C8956C" font-weight="700">3</text>
+      <text x="260" y="148" text-anchor="middle" font-size="10" fill="#C8956C" font-weight="700">6</text>
+      <text x="212" y="99" text-anchor="middle" font-size="10" fill="#C8956C" font-weight="700">9</text>
+      <text x="260" y="180" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="11" fill="#C8956C" opacity="0.6">Уақыт — ем!</text>
+    </svg>`
+  },
+  {
+    q: "ҚАЗІР СІЗДІ ҚАЙ БЕЛГІ КӨБІРЕК АЛАҢДАТАДЫ?",
+    opts: [
+      {t:"Бас айналу", icon:"😵‍💫"},
+      {t:"Әлсіздік, тез шаршау", icon:"😮‍💨"},
+      {t:"Қан қысымының секіруі", icon:"📈"},
+      {t:"Қанда қанттың көтерілуі", icon:"🩸"},
+      {t:"Ауырсыну (бел, жүрек, буын)", icon:"🤕"},
+      {t:"Ұйқының бұзылуы", icon:"😴"},
+      {t:"Іш қату / кебу", icon:"🫠"},
+      {t:"Бас ауруы", icon:"🤯"}
+    ],
+    image: `<svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="520" height="200" fill="#FFF0F0"/>
+      <!-- head silhouette -->
+      <circle cx="260" cy="80" r="40" fill="#FFDDDD"/>
+      <ellipse cx="260" cy="75" rx="30" ry="33" fill="#E8D5D5"/>
+      <!-- pain waves -->
+      <path d="M215 60 Q225 45,240 55 Q255 65,270 50 Q285 35,300 55" stroke="#C0392B" stroke-width="2" fill="none" opacity="0.4"><animate attributeName="d" values="M215 60 Q225 45,240 55 Q255 65,270 50 Q285 35,300 55;M215 55 Q225 50,240 60 Q255 55,270 45 Q285 40,300 50;M215 60 Q225 45,240 55 Q255 65,270 50 Q285 35,300 55" dur="3s" repeatCount="indefinite"/></path>
+      <path d="M220 75 Q235 60,250 70 Q265 80,280 65 Q295 50,305 70" stroke="#E67E22" stroke-width="1.5" fill="none" opacity="0.3"><animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite"/></path>
+      <!-- lightning bolts -->
+      <path d="M230 50 L225 60 L232 58 L228 70" stroke="#C0392B" stroke-width="2" fill="none" opacity="0.5"><animate attributeName="opacity" values="0.5;0.1;0.5" dur="1.5s" repeatCount="indefinite"/></path>
+      <path d="M290 48 L285 58 L292 56 L288 68" stroke="#C0392B" stroke-width="2" fill="none" opacity="0.4"><animate attributeName="opacity" values="0.1;0.5;0.1" dur="1.8s" repeatCount="indefinite"/></path>
+      <text x="260" y="170" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="11" fill="#C0392B" opacity="0.45">Белгілерді анықтаңыз</text>
+    </svg>`
+  },
+  {
+    q: "АНАЛИЗ ТАПСЫРЫП КӨРДІҢІЗ БЕ?",
+    opts: [
+      {t:"Иә, анализ бар", icon:"✅"},
+      {t:"Бұрын тапсырғанмын", icon:"📋"},
+      {t:"Жоқ, тапсырмағанмын", icon:"❌"},
+      {t:"Білмеймін", icon:"❓"}
+    ],
+    image: `<svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="520" height="200" fill="#F0F4FF"/>
+      <!-- clipboard -->
+      <rect x="210" y="35" width="100" height="130" rx="8" fill="#fff" stroke="#3B6B4A" stroke-width="2"/>
+      <rect x="240" y="28" width="40" height="16" rx="4" fill="#3B6B4A"/>
+      <!-- lines -->
+      <rect x="225" y="60" width="70" height="4" rx="2" fill="#3B6B4A" opacity="0.15"/>
+      <rect x="225" y="72" width="55" height="4" rx="2" fill="#3B6B4A" opacity="0.12"/>
+      <rect x="225" y="84" width="65" height="4" rx="2" fill="#3B6B4A" opacity="0.15"/>
+      <rect x="225" y="96" width="45" height="4" rx="2" fill="#C0392B" opacity="0.25"/>
+      <rect x="225" y="108" width="60" height="4" rx="2" fill="#3B6B4A" opacity="0.12"/>
+      <rect x="225" y="120" width="50" height="4" rx="2" fill="#E67E22" opacity="0.2"/>
+      <!-- check marks -->
+      <path d="M290 60 L295 65 L305 52" stroke="#27AE60" stroke-width="2" fill="none"/>
+      <path d="M290 84 L295 89 L305 76" stroke="#27AE60" stroke-width="2" fill="none"/>
+      <!-- magnifier -->
+      <circle cx="335" cy="115" r="20" fill="none" stroke="#C8956C" stroke-width="2.5"/>
+      <line x1="350" y1="130" x2="365" y2="145" stroke="#C8956C" stroke-width="3" stroke-linecap="round"/>
+      <text x="260" y="185" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="11" fill="#3B6B4A" opacity="0.45">Анализдеріңіз маңызды</text>
+    </svg>`
+  },
+  {
+    q: "ҚАЗІР ҚАНДАЙ ЕМ ҚАБЫЛДАП ЖҮРСІЗ?",
+    opts: [
+      {t:"Дәрі-дәрмек", icon:"💊"},
+      {t:"Укол / капельница", icon:"💉"},
+      {t:"Халықтық ем", icon:"🌿"},
+      {t:"Ештеңе қабылдамаймын", icon:"🚫"}
+    ],
+    image: `<svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="520" height="200" fill="#F5FFF5"/>
+      <!-- pills -->
+      <rect x="170" y="70" width="40" height="22" rx="11" fill="#E74C3C" opacity="0.6"/>
+      <rect x="170" y="70" width="20" height="22" rx="11" fill="#C0392B" opacity="0.6"/>
+      <!-- capsule -->
+      <rect x="230" y="85" width="46" height="20" rx="10" fill="#3498DB" opacity="0.5" transform="rotate(-15 253 95)"/>
+      <rect x="230" y="85" width="23" height="20" rx="10" fill="#2980B9" opacity="0.5" transform="rotate(-15 253 95)"/>
+      <!-- leaf (natural) -->
+      <path d="M320 60 Q350 40,360 70 Q370 100,340 110 Q330 80,320 60Z" fill="#27AE60" opacity="0.4"/>
+      <line x1="340" y1="65" x2="335" y2="100" stroke="#27AE60" stroke-width="1.5" opacity="0.5"/>
+      <!-- syringe -->
+      <rect x="280" y="120" width="50" height="10" rx="3" fill="#95A5A6" opacity="0.4"/>
+      <rect x="325" y="117" width="8" height="16" rx="2" fill="#BDC3C7" opacity="0.4"/>
+      <line x1="280" y1="125" x2="270" y2="125" stroke="#95A5A6" stroke-width="2"/>
+      <!-- cross -->
+      <rect x="140" y="110" width="24" height="8" rx="2" fill="#C0392B" opacity="0.2"/>
+      <rect x="148" y="102" width="8" height="24" rx="2" fill="#C0392B" opacity="0.2"/>
+      <text x="260" y="170" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="11" fill="#3B6B4A" opacity="0.45">Қандай ем қолданасыз?</text>
+    </svg>`
+  },
+  {
+    q: "ҚАБЫЛДАП ЖАТҚАН ЕМНІҢ НӘТИЖЕСІ БАРМА?",
+    opts: [
+      {t:"Иә, нәтижесі бар", icon:"👍"},
+      {t:"Уақытша әсер етіп жатыр", icon:"⚖️"},
+      {t:"Нәтиже жоқ", icon:"👎"}
+    ],
+    image: `<svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="520" height="200" fill="#FFFAF0"/>
+      <!-- graph going up then down -->
+      <polyline points="130,140 180,130 220,110 260,80 300,90 340,120 380,140" stroke="#C0392B" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="4 4" opacity="0.4"/>
+      <!-- graph going up -->
+      <polyline points="130,140 180,125 220,100 260,70 300,50 340,40 380,35" stroke="#27AE60" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <!-- axes -->
+      <line x1="120" y1="145" x2="390" y2="145" stroke="#3B6B4A" stroke-width="1" opacity="0.2"/>
+      <line x1="120" y1="30" x2="120" y2="145" stroke="#3B6B4A" stroke-width="1" opacity="0.2"/>
+      <!-- labels -->
+      <text x="385" y="160" font-size="9" fill="#27AE60" font-weight="700" opacity="0.6">Нәтиже ✓</text>
+      <text x="370" y="155" font-size="9" fill="#C0392B" font-weight="700" opacity="0.5">Уақытша ↓</text>
+      <!-- question mark -->
+      <text x="260" y="180" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="11" fill="#C8956C" opacity="0.5">Емнің тиімділігі</text>
+    </svg>`
+  },
+  {
+    q: "ОСЫ АУРУЫҢЫЗДАН ДӘРІ-ДӘРМЕКСІЗ ТАБИҒИ ЖОЛМЕН ЖАЗЫЛЫП КЕТКІҢІЗ КЕЛЕ МЕ?",
+    opts: [
+      {t:"Иә, әрине! 🙌", icon:"✨"},
+      {t:"Жоқ", icon:"🤔"}
+    ],
+    image: `<svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="520" height="200" fill="#F0FFF0"/>
+      <!-- sunrise -->
+      <circle cx="260" cy="130" r="50" fill="#FFD93D" opacity="0.2"><animate attributeName="r" values="45;55;45" dur="4s" repeatCount="indefinite"/></circle>
+      <circle cx="260" cy="130" r="35" fill="#FFD93D" opacity="0.25"/>
+      <!-- rays -->
+      <line x1="260" y1="75" x2="260" y2="55" stroke="#FFD93D" stroke-width="2" opacity="0.4"/>
+      <line x1="295" y1="85" x2="310" y2="70" stroke="#FFD93D" stroke-width="2" opacity="0.3"/>
+      <line x1="225" y1="85" x2="210" y2="70" stroke="#FFD93D" stroke-width="2" opacity="0.3"/>
+      <line x1="310" y1="110" x2="328" y2="105" stroke="#FFD93D" stroke-width="2" opacity="0.3"/>
+      <line x1="210" y1="110" x2="192" y2="105" stroke="#FFD93D" stroke-width="2" opacity="0.3"/>
+      <!-- person silhouette rising -->
+      <ellipse cx="260" cy="105" rx="12" ry="14" fill="#3B6B4A" opacity="0.4"/>
+      <rect x="249" y="116" width="22" height="32" rx="6" fill="#3B6B4A" opacity="0.35"/>
+      <!-- arms up -->
+      <line x1="249" y1="122" x2="232" y2="100" stroke="#3B6B4A" stroke-width="3" stroke-linecap="round" opacity="0.35"/>
+      <line x1="271" y1="122" x2="288" y2="100" stroke="#3B6B4A" stroke-width="3" stroke-linecap="round" opacity="0.35"/>
+      <!-- leaves -->
+      <path d="M170 140 Q185 115,200 130 Q190 145,170 140Z" fill="#27AE60" opacity="0.3"/>
+      <path d="M340 135 Q355 112,370 128 Q360 143,340 135Z" fill="#27AE60" opacity="0.3"/>
+      <path d="M155 120 Q168 100,178 118 Q170 130,155 120Z" fill="#5A9B6B" opacity="0.25"/>
+      <path d="M355 118 Q368 98,378 116 Q370 128,355 118Z" fill="#5A9B6B" opacity="0.25"/>
+      <text x="260" y="185" text-anchor="middle" font-family="Montserrat,sans-serif" font-weight="700" font-size="12" fill="#3B6B4A" opacity="0.5">Табиғи сауықтыру 🌿</text>
+    </svg>`
+  }
+];
+
+let current = 0;
+const answers = [];
+
+function startQuiz(){
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('quizSection').classList.remove('hidden');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = questions[current];
+  const card = document.getElementById('quizCard');
+  card.style.animation='none';card.offsetHeight;card.style.animation='cardIn .5s ease';
+
+  document.getElementById('cardImage').innerHTML = q.image;
+  document.getElementById('qNumber').textContent = `Сұрақ ${current+1}`;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('progressBar').style.width = ((current)/7*100)+'%';
+  document.getElementById('progressText').textContent = `Сұрақ ${current+1} / 7`;
+
+  const wrap = document.getElementById('optionsWrap');
+  wrap.innerHTML = '';
+  q.opts.forEach((o,i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.innerHTML = `<div class="option-icon">${o.icon}</div><div class="option-text">${o.t}</div>`;
+    div.onclick = () => selectOption(i, o.t, div);
+    // staggered entrance
+    div.style.opacity='0';div.style.transform='translateY(12px)';
+    setTimeout(()=>{div.style.transition='all .3s ease';div.style.opacity='1';div.style.transform='translateY(0)'}, 60*(i+1));
+    wrap.appendChild(div);
+  });
+}
+
+function selectOption(i, text, el){
+  document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[current] = text;
+
+  setTimeout(()=>{
+    current++;
+    if(current < questions.length){
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }, 400);
+}
+
+function showResult(){
+  document.getElementById('quizSection').classList.add('hidden');
+  document.getElementById('progressBar').style.width = '100%';
+  document.getElementById('leadSection').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function submitLead(){
+  const name = document.getElementById('leadName').value.trim();
+  const phone = document.getElementById('leadPhone').value.trim();
+
+  if(!name){
+    document.getElementById('leadName').focus();
+    document.getElementById('leadName').style.borderColor='#C0392B';
+    return;
+  }
+  if(!phone){
+    document.getElementById('leadPhone').focus();
+    document.getElementById('leadPhone').style.borderColor='#C0392B';
+    return;
+  }
+
+  document.getElementById('leadSection').classList.add('hidden');
+
+  const lines = [
+    `🌿 ЖАН МЕН ТӘН — Жаңа лид!`,
+    ``,
+    `👤 Аты: ${name}`,
+    `📱 Телефон: ${phone}`,
+    ``,
+    `📋 Квиз жауаптары:`,
+    `1. Мәселе: ${answers[0]||'—'}`,
+    `2. Қанша уақыт: ${answers[1]||'—'}`,
+    `3. Белгі: ${answers[2]||'—'}`,
+    `4. Анализ: ${answers[3]||'—'}`,
+    `5. Ем: ${answers[4]||'—'}`,
+    `6. Нәтиже: ${answers[5]||'—'}`,
+    `7. Табиғи ем: ${answers[6]||'—'}`,
+    ``,
+    `Маған жеке кеңес беріңізші 🙏`
+  ];
+  const waURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+
+  const res = document.getElementById('resultSection');
+  res.classList.remove('hidden');
+  res.innerHTML = `
+    <div class="result-card">
+      <div class="result-image">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="80" fill="#E8F5E9"/>
+          <circle cx="100" cy="100" r="60" fill="#C8E6C9" opacity="0.6"/>
+          <path d="M100 130 C85 118,65 100,65 85 C65 73,73 65,83 65 C90 65,96 70,100 76 C104 70,110 65,117 65 C127 65,135 73,135 85 C135 100,115 118,100 130Z" fill="#27AE60" opacity="0.7"/>
+          <path d="M82 90 L95 103 L120 78" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="result-body">
+        <h2>Рахмет, ${name}! ✅</h2>
+        <p>Сіздің жауаптарыңыз бойынша <strong>жеке сауықтыру бағдарламасын</strong> ұсына аламыз. Нәтижеңізді алу үшін WhatsApp арқылы хабарласыңыз!</p>
+
+        <div class="result-summary">
+          <div class="item"><span>👤</span><span>Аты: <strong>${name}</strong></span></div>
+          <div class="item"><span>📱</span><span>Телефон: <strong>${phone}</strong></span></div>
+          <div class="item"><span>1.</span><span>Мәселе: <strong>${answers[0]||'—'}</strong></span></div>
+          <div class="item"><span>2.</span><span>Ұзақтығы: <strong>${answers[1]||'—'}</strong></span></div>
+          <div class="item"><span>3.</span><span>Белгі: <strong>${answers[2]||'—'}</strong></span></div>
+          <div class="item"><span>4.</span><span>Анализ: <strong>${answers[3]||'—'}</strong></span></div>
+          <div class="item"><span>5.</span><span>Ем: <strong>${answers[4]||'—'}</strong></span></div>
+          <div class="item"><span>6.</span><span>Нәтиже: <strong>${answers[5]||'—'}</strong></span></div>
+          <div class="item"><span>7.</span><span>Табиғи ем: <strong>${answers[6]||'—'}</strong></span></div>
+        </div>
+
+        <a href="${waURL}" target="_blank" class="whatsapp-btn" onclick="this.style.opacity=0.7">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp-қа жазу
+        </a>
+      </div>
+    </div>
+  `;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>
