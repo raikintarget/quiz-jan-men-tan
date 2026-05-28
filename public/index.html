@@ -833,6 +833,14 @@ function submitLead(){
     return;
   }
   clearInterval(timerInterval);
+
+  // Save to server (Google Sheets + local) — fire and forget
+  fetch('/api/lead', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ name, phone, answers })
+  }).catch(()=>{});
+
   document.getElementById('leadSection').classList.add('hidden');
 
   const lines = [
