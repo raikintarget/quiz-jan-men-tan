@@ -421,6 +421,17 @@ body::before{
 
 .wa-note{font-size:0.78rem;color:var(--text-light);margin-top:10px;line-height:1.5;}
 
+/* ── SITE BADGE ── */
+.site-badge{
+  position:fixed;bottom:18px;right:14px;z-index:999;
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,#3B6B4A,#5A9B6B);
+  color:#fff;font-family:'Montserrat',sans-serif;font-weight:900;font-size:1.25rem;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 18px rgba(59,107,74,0.45);
+  border:3px solid #fff;pointer-events:none;
+}
+
 /* ── HIDDEN ── */
 .hidden{display:none!important}
 
@@ -525,6 +536,8 @@ body::before{
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=3768163653351353&ev=PageView&noscript=1"
 /></noscript>
+
+<div class="site-badge">А</div>
 
 <!-- STICKY URGENT BANNER -->
 <div class="urgent-banner">
@@ -947,7 +960,7 @@ function submitLead(){
   document.getElementById('leadSection').classList.add('hidden');
 
   const lines = [
-    `🌿 ЖАН МЕН ТӘН — Жаңа лид!`,
+    `🟢 ЖАН МЕН ТӘН — Жаңа лид! [САЙТ А]`,
     ``,
     `👤 Аты: ${name}`,
     `📱 Телефон: ${phone}`,
